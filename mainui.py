@@ -13,15 +13,12 @@ __author__ = "joyce"
 class MainUi(QMainWindow):
     def __init__(self, parent=None):
         super(MainUi, self).__init__(parent)
-        self.cwd = os.getcwd()  # 获取当前程序文件位置
-        # self.cwd = "D:\\project\\LoveDance_N1\\data\\xlsx"
         self.xls_dir_list = ""
         self.resize(1066, 784)
         self.setWindowTitle('xls拆分导出txt工具')
-        self.sheetlabel = QLabel("sheetname：")
-        self.xlsdirlabel = QLabel("xls文件地址：")
         self.sheetname = QTextEdit()
         self.xls_dir = QTextEdit()
+        self.xls_path = QLineEdit("D:\\project\\LoveDance_N1\\data\\xlsx")
         self.startButton = QPushButton("开始")
         self.selectButton = QPushButton("选择xls文件")
         self.selectButton.clicked.connect(self.btn_chooseMutiFile)
@@ -47,17 +44,20 @@ class MainUi(QMainWindow):
         self.retranslateUi()
 
     def retranslateUi(self):
-        dirGroupBox = QGroupBox("")
-        sheetGroupBox = QGroupBox("")
+        pathGroupBox = QGroupBox("xls文件起始路径：")
+        dirGroupBox = QGroupBox("xls文件地址：")
+        sheetGroupBox = QGroupBox("sheetname：")
         btnGroupBox = QGroupBox("")
 
-        layout = QHBoxLayout()
-        layout.addWidget(self.xlsdirlabel)
-        layout.addWidget(self.xls_dir)
-        dirGroupBox.setLayout(layout)
+        layout = QVBoxLayout()
+        layout.addWidget(self.xls_path)
+        pathGroupBox.setLayout(layout)
 
-        layout2 = QHBoxLayout()
-        layout2.addWidget(self.sheetlabel)
+        layout1 = QVBoxLayout()
+        layout1.addWidget(self.xls_dir)
+        dirGroupBox.setLayout(layout1)
+
+        layout2 = QVBoxLayout()
         layout2.addWidget(self.sheetname)
         sheetGroupBox.setLayout(layout2)
 
@@ -70,6 +70,7 @@ class MainUi(QMainWindow):
         btnGroupBox.setLayout(layout3)
 
         mainLayout = QVBoxLayout()
+        mainLayout.addWidget(pathGroupBox)
         mainLayout.addWidget(dirGroupBox)
         mainLayout.addWidget(sheetGroupBox)
         mainLayout.addWidget(btnGroupBox)
@@ -89,16 +90,25 @@ class MainUi(QMainWindow):
     def btn_chooseMutiFile(self):
         self.xls_dir.setPlainText("")
         self.sheetname.setPlainText("")
+
+        if not os.path.exists(self.xls_path.text()):
+            reply = QMessageBox.critical(self, "提示", self.tr("xls文件起始路径不存在，请检查!"), QMessageBox.Ok)
+            if reply == QMessageBox.Ok:
+                return
+
         self.xls_dir_list, filetype = QFileDialog.getOpenFileNames(self,
                                                                    "多文件选择",
-                                                                   self.cwd,  # 起始路径
+                                                                   self.xls_path.text(),  # 起始路径
                                                                    "Excel Files(*.xls *.xlsx)")
         if len(self.xls_dir_list) == 0:
-            print("\n取消选择")
-            return
+            reply = QMessageBox.critical(self, "提示", self.tr("未选择需拆分的xls文件，请检查!"), QMessageBox.Ok)
+            if reply == QMessageBox.Ok:
+                return
 
         for file in self.xls_dir_list:
             self.xls_dir.append(file)
+
+
 
     def updateProgressBar(self, text):
         print("%s: 进度：%s" % (time.strftime('%H:%M:%S', time.localtime(time.time())), int(text)))
@@ -111,12 +121,12 @@ class MainUi(QMainWindow):
         self.sheetname.append(text)
         self.progressthread.finish_state = True
         self.progressBar.setValue(100)
-        QMessageBox.information(self, "提示", self.tr("xls拆分完成!"), QMessageBox.Ok)
+        QMessageBox.information(self, "提示", self.tr("xls文件拆分完成!"), QMessageBox.Ok)
 
     def startWork(self):
         # 如果xls未选择进行警告提示
-        if self.xls_dir_list == "":
-            reply = QMessageBox.critical(self, "提示", self.tr("未选择拆分的xls文件，请检查!"), QMessageBox.Ok)
+        if len(self.xls_dir_list) == 0:
+            reply = QMessageBox.critical(self, "提示", self.tr("未选择需拆分的xls文件，请检查!"), QMessageBox.Ok)
             if reply == QMessageBox.Ok:
                 return
 
