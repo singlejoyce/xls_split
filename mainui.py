@@ -101,7 +101,7 @@ class MainUi(QMainWindow):
             self.xls_dir.append(file)
 
     def updateProgressBar(self, text):
-        print("%s,进度：%s" % (time.strftime('%H:%M:%S', time.localtime(time.time())), int(text)))
+        print("%s: 进度：%s" % (time.strftime('%H:%M:%S', time.localtime(time.time())), int(text)))
         if int(text) < 100:
             self.progressBar.setValue(int(text))
         else:

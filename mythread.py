@@ -21,7 +21,7 @@ class MyThread(QtCore.QThread):
         while True:
             step = step + 5
             time.sleep(1)
-            print("self.finish_state = ", self.finish_state)
+            # print("self.finish_state = ", self.finish_state)
             if not self.finish_state:
                 self.update_progressBar_signal.emit(str(step))
             else:
