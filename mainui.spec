@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['mainui.py'],
-             pathex=['mythread.py', 'D:\\mywork\\xls_split_txt'],
+             pathex=['mythread.py', 'D:\\mywork\\xls_split'],
              binaries=[],
              datas=[],
              hiddenimports=['mythread'],

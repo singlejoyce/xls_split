@@ -62,11 +62,8 @@ class MainUi(QMainWindow):
         sheetGroupBox.setLayout(layout2)
 
         layout3 = QHBoxLayout()
-        # layout3.addStretch(2)
         layout3.addWidget(self.selectButton)
-        # layout3.addStretch(1)
         layout3.addWidget(self.startButton)
-        # layout3.addStretch(1)
         btnGroupBox.setLayout(layout3)
 
         mainLayout = QVBoxLayout()
@@ -74,7 +71,7 @@ class MainUi(QMainWindow):
         mainLayout.addWidget(dirGroupBox)
         mainLayout.addWidget(sheetGroupBox)
         mainLayout.addWidget(btnGroupBox)
-        # mainLayout.addStretch()  # 平分布局
+
         main_frame = QWidget()
         main_frame.setLayout(mainLayout)
         self.setCentralWidget(main_frame)
