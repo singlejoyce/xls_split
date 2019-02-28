@@ -1,2 +1,2 @@
-pyinstaller -i excel.ico main.py 
+pyinstaller -i excel.ico mainui.py 
 pause
