@@ -175,7 +175,7 @@ class MainUi(QMainWindow):
         self.progressthread.start()
 
         # 处理excel操作的线程，防止ui界面卡住
-        self.workthread = WorkThread(self.xls_dir_list_l, self.xls_dir_list_r)
+        self.workthread = WorkThread2(self.xls_dir_list_l, self.xls_dir_list_r)
         self.workthread.finish_state_signal.connect(self.finishWork)
         self.workthread.start()
 

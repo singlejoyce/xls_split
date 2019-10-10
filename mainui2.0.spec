@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['mainui.py'],
-             pathex=['mythread.py', 'D:\\python_prj\\xls_split2.0'],
+a = Analysis(['mainui2.0.py'],
+             pathex=['mythread.py', 'D:\\python_prj\\xls_split'],
              binaries=[],
              datas=[],
              hiddenimports=['mythread'],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='mainui',
+          name='mainui2.0',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,

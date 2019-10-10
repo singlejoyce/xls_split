@@ -173,4 +173,3 @@ if __name__ == '__main__':
     ex = MainUi()
     ex.show()
     sys.exit(app.exec_())
-
