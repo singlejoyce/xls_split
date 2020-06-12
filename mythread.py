@@ -28,14 +28,14 @@ class MyThread(QtCore.QThread):
                 break
 
 
-def export_excel(result_path, xls_dir, pos):
+def export_txt(result_path, xls_dir, pos):
     xls = pd.ExcelFile(xls_dir)
     sheet_names = xls.sheet_names
     txt_save_path = os.path.join(result_path, pos, os.path.basename(xls_dir))
     if not os.path.isdir(txt_save_path):
         os.makedirs(txt_save_path)
     for sheet_name in sheet_names:
-        txt_dir = os.path.join(txt_save_path, sheet_name + ".csv")
+        txt_dir = os.path.join(txt_save_path, sheet_name + ".txt")
         tempsheet = pd.read_excel(xls_dir, sheet_name=sheet_name)
         # 处理格式问题，强制将所有的float64格式转换为int型
         tempsheet.fillna(0, inplace=True)
@@ -43,8 +43,7 @@ def export_excel(result_path, xls_dir, pos):
             if tempsheet.dtypes[column].name == "float64":
                 tempsheet[column] = tempsheet[column].map(int)
         tempsheet.reset_index(drop=True, inplace=True)
-        tempsheet.to_csv(txt_dir)
-        # tempsheet.to_csv(txt_dir, index=False)
+        tempsheet.to_csv(txt_dir, sep='\t', index=False)
 
 
 class WorkThread(QtCore.QThread):
@@ -58,7 +57,7 @@ class WorkThread(QtCore.QThread):
         sheet_names_show = ""
         result_path = os.getcwd() + '\\reslut\\' + time.strftime('%Y%m%d-%H%M%S', time.localtime(time.time()))
         for xls_dir in self.xls_dir_list:
-            export_excel(result_path, xls_dir, "")
+            export_txt(result_path, xls_dir, "")
             # sheet_names_show = sheet_names_show + os.path.basename(xls_dir) + "表名显示为：\n" + str(
             #     sheet_names) + "\n"
 
@@ -76,10 +75,10 @@ class WorkThread2(QtCore.QThread):
     def run(self):
         result_path = os.getcwd() + '\\reslut\\' + time.strftime('%Y%m%d-%H%M%S', time.localtime(time.time()))
         for xls_dir in self.xls_dir_list_l:
-            export_excel(result_path, xls_dir, "Left")
+            export_txt(result_path, xls_dir, "Left")
 
         for xls_dir in self.xls_dir_list_r:
-            export_excel(result_path, xls_dir, "Right")
+            export_txt(result_path, xls_dir, "Right")
 
         self.finish_state_signal.emit("finished!")  # 处理完毕后发出信号
 
